@@ -14,15 +14,18 @@ import tkinter as tk
 import ttkbootstrap as ttk
 from frontend.app import ApplicationGUI
 
+
 def main():
+    def on_closing():
+        if app.backend.driver:
+            app.backend.driver.quit()
+        root.destroy()
+
     root = ttk.Window(themename="journal")
-    #menu = tk.Menu(root)
-    #root.config(menu=menu)
-    #menu.add_command(label="Exit", command=quit)
-    
     icon = tk.PhotoImage(file=resource_path("feuerwehrhelm.png"))
     root.iconphoto(True, icon)
     app = ApplicationGUI(root)
+    root.protocol("WM_DELETE_WINDOW", on_closing)
     root.mainloop()
 
 if __name__ == "__main__":
