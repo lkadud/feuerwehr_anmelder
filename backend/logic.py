@@ -71,6 +71,31 @@ class BackendLogic:
         except Exception as e:
             print(f"Could not find the cookie banner: {e}")
 
+    def accept_dataprivacy_checkboxes(self):
+        try:
+            self.insert_checkbox("dsh")
+        except Exception as e:
+            print(f"Could not find the data privacy checkbox: {e}")
+        
+        try:
+            self.insert_checkbox("hwkf")
+        except Exception as e:
+            print(f"Could not find the hwkf checkbox: {e}")
+
+        try:
+            self.insert_checkbox("vollstaendigkf")
+        except Exception as e:
+            print(f"Could not find the data completenes checkbox: {e}")
+
+    def accept_and_send_form(self):
+        try:
+            # Locate the cookie acceptance button (replace with the actual identifier)
+            send_button = self.driver.find_element(By.XPATH, "//input[@class='fRight']")
+            send_button.click()
+            print("Cookie banner accepted.")
+        except Exception as e:
+            print(f"Could not find the cookie banner: {e}")
+
     def check(self):
         if self.driver is None:
             return False
@@ -127,3 +152,7 @@ class BackendLogic:
         date_field = self.driver.find_element(By.ID, key)
         date_field.clear()
         date_field.send_keys(value)
+
+    def insert_checkbox(self, key):
+        checkbox = self.driver.find_element(By.ID, key)
+        self.driver.execute_script("arguments[0].click();", checkbox)
