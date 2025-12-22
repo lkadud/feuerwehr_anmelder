@@ -17,7 +17,7 @@ if __name__ == "__main__":
     
     # Set up the WebDriver (using Chrome in this example)
     driver = webdriver.Firefox()
-    driver.get("https://www.feuerwehrverband.nrw/veranstaltungen/jugendfeuerwehr/details/Flipcharts-und-PowerPoint-gestalten-und-pr%C3%A4sentieren-Wuppertal-991")
+    driver.get("<add-url>")
     time.sleep(2)
 
     # Accepting cookies
@@ -28,8 +28,25 @@ if __name__ == "__main__":
         print("Cookie banner accepted.")
     except Exception as e:
         print(f"Could not find the cookie banner: {e}")
-    time.sleep(2)
+    time.sleep(5)
+    
 
+    checkbox = driver.find_element(By.ID, "dsh")
+    driver.execute_script("arguments[0].click();", checkbox)
+
+    checkbox = driver.find_element(By.ID, "hwkf")
+    driver.execute_script("arguments[0].click();", checkbox)
+
+    checkbox = driver.find_element(By.ID, "vollstaendigkf")
+    driver.execute_script("arguments[0].click();", checkbox)
+    #print(checkbox.get_attribute("data-err"))
+    #checkbox.click()
+
+
+    #submit_button = driver.find_element(By.XPATH, "//input[@class='fRight']")
+    #submit_button.click()
+
+    """
     try:
         # Anmelder
         feuerwehr_field = driver.find_element(By.ID, "rechnung_firma_chosen")
@@ -107,5 +124,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"An error occurred: {e}")
         time.sleep(1000)
-    
+    """
+    time.sleep(10000)
     driver.quit()

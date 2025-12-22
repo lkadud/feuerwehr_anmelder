@@ -22,6 +22,7 @@ class BackendLogic:
             self.driver=None
         if browser == "Firefox":
             self.driver = webdriver.Firefox()
+            print(self.driver)
         else:
             self.driver = webdriver.Chrome() #Check if chrome works as well...
 
@@ -97,8 +98,10 @@ class BackendLogic:
             print(f"Could not find the cookie banner: {e}")
 
     def check(self):
+        print(self.driver)
         if self.driver is None:
             return False
+        return True
 
     def process_anmelder(self):
         anmelder = self.anmelder.to_records()[0]
