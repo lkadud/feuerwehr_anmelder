@@ -7,7 +7,6 @@ uvx pyinstaller --onefile \
                 --nowindow \
                 --clean \
                 --icon=feuerwehrhelm.ico \
-                --collect-all ttkbootstrap\
                 --paths ./.venv/lib64/python3.13/site-packages/ \
                 --name "Feuerwehr-Anmelder" \
                 --hidden-import="PIL._tkinter_finder" \
