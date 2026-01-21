@@ -3,7 +3,7 @@ from tkinter import messagebox, filedialog
 #from tkinter import ttk
 import ttkbootstrap as ttk
 from ttkbootstrap.tableview import Tableview
-import ttkbootstrap.localizations
+import ttkbootstrap.localization
 ttkbootstrap.localization.initialize_localities = bool
 from backend.logic import BackendLogic
 
