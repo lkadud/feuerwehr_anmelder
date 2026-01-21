@@ -1,0 +1,18 @@
+name: Build Python Application
+
+on: push
+
+#permissions:
+#  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build application
+        run: |
+             pip install -r requirements.txt
+             . build.sh
