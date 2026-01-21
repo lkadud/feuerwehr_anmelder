@@ -1,9 +1,6 @@
 name: Build Python Application
 
-on: 
-  push:
-    tags:
-      - 'v*'
+on: push
 
 permissions:
   contents: read
