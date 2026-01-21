@@ -12,7 +12,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setupuv@v7
+        with:
+          version: "0.9.26"
+          
       - name: Build application
         run: |
-             pip install -r requirements.txt
+             uv pip install -r requirements.txt
              . build.sh
