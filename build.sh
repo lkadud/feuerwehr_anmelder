@@ -10,5 +10,6 @@ uvx pyinstaller --onefile \
                 --paths ./.venv/lib64/python3.13/site-packages/ \
                 --name "Feuerwehr-Anmelder" \
                 --hidden-import="PIL._tkinter_finder" \
+                --collect-data "selenium" \
                 --add-data="feuerwehrhelm.png:." \
                 main.py
