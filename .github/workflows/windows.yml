@@ -28,16 +28,7 @@ jobs:
         run: |
              uv venv .venv
              uv pip install -r requirements.txt
-             uvx pyinstaller --onefile \
-                --nowindow \
-                --clean \
-                --icon=feuerwehrhelm.ico \
-                --paths ./.venv/lib64/python3.13/site-packages/ \
-                --name "Feuerwehr-Anmelder" \
-                --hidden-import="PIL._tkinter_finder" \
-                --collect-data "selenium" \
-                --add-data="feuerwehrhelm.png:." \
-                main.py
+             uvx pyinstaller --onefile --nowindow --clean --icon=feuerwehrhelm.ico --paths ./.venv/lib64/python3.13/site-packages/ --name "Feuerwehr-Anmelder" --hidden-import="PIL._tkinter_finder" --collect-data "selenium" --add-data="feuerwehrhelm.png:." main.py
       - name: Store build-files
         uses: actions/upload-artifact@v4
         with:
