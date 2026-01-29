@@ -57,10 +57,13 @@ class ApplicationGUI(ttk.Frame):
         
         # Misc settings
         self.one_shot_var = tk.BooleanVar()
+        self.fail_var = tk.BooleanVar()
         self.frame_misc = ttk.Frame(self.frame)
         self.frame_misc.pack(fill=tk.X, expand=tk.YES, pady=15)#.grid(row=1, column=0)
-        self.check_oneshot = ttk.Checkbutton(self.frame_misc, text="Oneshot", style="Squaretoggle.Toolbutton", variable=self.one_shot_var)
-        self.check_oneshot.pack(side="right")
+        self.check_oneshot = ttk.Checkbutton(self.frame_misc, text="Oneshot", variable=self.one_shot_var)
+        self.check_oneshot.pack(side="right", padx=(15,15),)
+        self.check_fail_on_error = ttk.Checkbutton(self.frame_misc, text="Fail on Error", variable=self.fail_var)
+        self.check_fail_on_error.pack(side="right", padx=(15,15),)
         
         # Start?
         self.sep = ttk.Separator(self.frame, orient=tk.HORIZONTAL)
@@ -73,7 +76,21 @@ class ApplicationGUI(ttk.Frame):
 
         # Reset?
         self.button_reset = ttk.Button(self.frame_process, text="Reset!", bootstyle="secondary", width=8, command=self.reset)
-        self.button_reset.pack(side="right", padx=5)#grid(row=7, column=0, sticky="nsew")
+        self.button_reset.pack(side="left", padx=5)#grid(row=7, column=0, sticky="nsew")
+
+
+        def toggle_spinbox():
+            if self.all_var.get() == True:
+                self.spinbox_row.configure(state="disabled")
+            else:
+                self.spinbox_row.configure(state="normal")
+        self.spinbox_var = tk.StringVar(value="1")
+        self.spinbox_row = ttk.Spinbox(self.frame_process, from_=1, to=1000, textvariable=self.spinbox_var)
+        self.spinbox_row.pack(side="right", padx=5)
+
+        self.all_var = ttk.BooleanVar()
+        self.check_all = ttk.Checkbutton(self.frame_process, text="All", variable=self.all_var, command=toggle_spinbox)
+        self.check_all.pack(side="right", padx=5,)
 
         self.table_frame = ttk.Frame(self)
         self.table_frame.pack(fill=tk.X, expand=tk.YES)#.grid(row=5, column=0, columnspan=3, sticky="nsew")
@@ -135,9 +152,12 @@ class ApplicationGUI(ttk.Frame):
 
     def process(self):
         if self.backend.check():
+            self.backend.set_fail(self.fail_var.get())
+            self.backend.set_all(self.all_var.get())
+            self.backend.set_numbers(self.spinbox_var.get())
             self.backend.process_anmelder()
             self.backend.process_teilnehmers()
             self.backend.accept_dataprivacy_checkboxes()
 
-            if self.check_oneshot.get():
+            if self.one_shot_var.get():
                 self.backend.accept_and_send_form()

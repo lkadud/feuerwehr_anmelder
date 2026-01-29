@@ -15,6 +15,18 @@ class BackendLogic:
         self.url = None
         self.teilnehmer = None
         self.anmelder = None
+        self.fail = False
+        self.all = False
+        self.numbers = 1
+
+    def set_fail(self, fail_on_error):
+        self.fail = fail_on_error
+
+    def set_all(self, all):
+        self.all = all
+
+    def set_numbers(self, numbers):
+        self.numbers = numbers
 
     def load_url(self, url, browser):
         if self.driver:
@@ -121,41 +133,66 @@ class BackendLogic:
         i = len(teilnehmers)
         self.insert_dropdown("cnt", str(2)) # somehow get this number from page
         for id, teilnehmer in enumerate(teilnehmers, start=1):
-            self.process_teilnehmer(id, teilnehmer)
+            try:
+                self.process_teilnehmer(id, teilnehmer)
+            except Exception as e:
+                break
 
 
     def process_teilnehmer(self, id, teilnehmer):
-        self.insert_dropdown_searchable(f"tn_firma_{id}", teilnehmer.Feuerwehr)
-        self.insert_dropdown(f"tn_funktion_{id}", teilnehmer.Funktion)
-        self.insert_dropdown(f"tn_anrede_{id}", teilnehmer.Anrede)
-        self.insert_text(f"tn_vname_{id}", teilnehmer.Vorname)
-        self.insert_text(f"tn_nname_{id}", teilnehmer.Nachname)
-        self.insert_text(f"tn_email_{id}", teilnehmer.Email)
-        self.insert_date(f"tn_geburtsdatum_{id}", teilnehmer.Geburtsdatum)
+        try:
+            self.insert_dropdown_searchable(f"tn_firma_{id}", teilnehmer.Feuerwehr)
+            self.insert_dropdown(f"tn_funktion_{id}", teilnehmer.Funktion)
+            self.insert_dropdown(f"tn_anrede_{id}", teilnehmer.Anrede)
+            self.insert_text(f"tn_vname_{id}", teilnehmer.Vorname)
+            self.insert_text(f"tn_nname_{id}", teilnehmer.Nachname)
+            self.insert_text(f"tn_email_{id}", teilnehmer.Email)
+            self.insert_date(f"tn_geburtsdatum_{id}", teilnehmer.Geburtsdatum)
+        except Exception as e:
+            print(e)
+            raise e
 
     def insert_dropdown_searchable(self, key, value):
-        dropdown_field = self.driver.find_element(By.ID, f"{key}_chosen")
-        dropdown_field.click() 
-        search_key = f"//div[@id='{key}_chosen']//input[@class='chosen-search-input']"
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, search_key)))
-        dropdown_drop = self.driver.find_element(By.XPATH, search_key)
-        dropdown_drop.send_keys(value)
-        dropdown_drop.send_keys(Keys.RETURN)  
+        try:
+            dropdown_field = self.driver.find_element(By.ID, f"{key}_chosen")
+            dropdown_field.click() 
+            search_key = f"//div[@id='{key}_chosen']//input[@class='chosen-search-input']"
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, search_key)))
+            dropdown_drop = self.driver.find_element(By.XPATH, search_key)
+            dropdown_drop.send_keys(value)
+            dropdown_drop.send_keys(Keys.RETURN)  
+        except Exception as e:
+            print(e)
 
     def insert_dropdown(self, key, value):
-        dropdown_field = self.driver.find_element(By.ID, key)
-        dropdown = Select(dropdown_field)
-        dropdown.select_by_visible_text(value)
+        try:
+            dropdown_field = self.driver.find_element(By.ID, key)
+            dropdown = Select(dropdown_field)
+            dropdown.select_by_visible_text(value)
+        except Exception as e:
+            print(e)
+            print(self.fail)
+            if self.fail:
+                raise e
 
     def insert_text(self, key, value):
-        text_field = self.driver.find_element(By.ID, key)
-        text_field.send_keys(value)
+        try:
+            text_field = self.driver.find_element(By.ID, key)
+            text_field.send_keys(value)
+        except Exception as e:
+            print(e)
 
     def insert_date(self, key, value):
-        date_field = self.driver.find_element(By.ID, key)
-        date_field.clear()
-        date_field.send_keys(value)
+        try:
+            date_field = self.driver.find_element(By.ID, key)
+            date_field.clear()
+            date_field.send_keys(value)
+        except Exception as e:
+            print(e)
 
     def insert_checkbox(self, key):
-        checkbox = self.driver.find_element(By.ID, key)
-        self.driver.execute_script("arguments[0].click();", checkbox)
+        try:
+            checkbox = self.driver.find_element(By.ID, key)
+            self.driver.execute_script("arguments[0].click();", checkbox)
+        except Exception as e:
+            print(e)
