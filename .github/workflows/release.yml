@@ -1,4 +1,4 @@
-name: Build Python Application for Windows
+name: Release Build for Windows
 
 on:
   push:
