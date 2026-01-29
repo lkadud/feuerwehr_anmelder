@@ -1,6 +1,8 @@
 name: Build Python Application for Windows
 
-on: push
+on: 
+  workflow_call:
+  push:
 
 #permissions:
 #  contents: read
