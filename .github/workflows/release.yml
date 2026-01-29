@@ -25,9 +25,9 @@ jobs:
       with:
         name: Exe-Build  # This retrieves the uploaded artifact
     - name: Create Release
-      run: 
-        ls -la
-        gh release create ${{ github.ref }} ./dist/* --title "Release Title" --notes "Release notes here."
+      run: |
+        ls -l
+        gh release create ${{ github.ref }} dist/* --title "Release Title" --notes "Release notes here."
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
