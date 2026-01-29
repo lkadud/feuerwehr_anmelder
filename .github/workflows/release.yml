@@ -25,10 +25,7 @@ jobs:
       with:
         name: Exe-Build  # This retrieves the uploaded artifact
     - name: Create Release
-      shell: bash
-      run: |
-        ls -l
-        gh release create ${{ github.ref }} Feuerwehr-Anmelder.exe --title "Release Title" --notes "Release notes here."
+      run: gh release create ${{ github.ref }} Feuerwehr-Anmelder.exe --title "Release Title"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
