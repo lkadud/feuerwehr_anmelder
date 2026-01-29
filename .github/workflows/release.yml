@@ -1,0 +1,64 @@
+name: Build Python Application for Windows
+
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:        
+      - 'v*' 
+#permissions:
+#  contents: read
+
+#env:
+#  UV_SYSTEM_PYTHON: 1
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.26"
+      - name: Set up Python
+        #run: uv python install
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+      - name: Build application
+        run: |
+             uv venv .venv
+             uv pip install -r requirements.txt
+             uvx pyinstaller --onefile --nowindow --clean --icon=feuerwehrhelm.ico --paths ./.venv/lib/site-packages/ --name "Feuerwehr-Anmelder" --hidden-import="PIL._tkinter_finder" --collect-data "selenium" --add-data="feuerwehrhelm.png:." main.py
+      - name: Store build-files
+        uses: actions/upload-artifact@v4
+        with:
+          name: Exe-Build
+          path: dist
+
+  release:
+    runs-on: windows-2022
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Exe-Build
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          files: dist # Specify the path to your artifact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
