@@ -4,9 +4,10 @@ on:
   push:
     # Pattern matched against refs/tags
     tags:        
-      - 'vv[0-9]+.[0-9]+' 
-#permissions:
-#  contents: read
+      - 'v[0-9]+.[0-9]+' 
+
+permissions:
+  contents: write
 
 #env:
 #  UV_SYSTEM_PYTHON: 1
