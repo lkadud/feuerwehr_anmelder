@@ -26,7 +26,7 @@ class BackendLogic:
         self.all = all
 
     def set_numbers(self, numbers):
-        self.numbers = numbers
+        self.numbers = int(numbers) -1
 
     def load_url(self, url, browser):
         if self.driver:
@@ -55,8 +55,10 @@ class BackendLogic:
 
     @staticmethod
     def convert_dataframe_to_table(df):
-        coldata = list(df)
+        coldata = ["ID"] + list(df)
         rowdata = df.values.tolist()
+        rowdata = [([idx] + elem) for idx, elem in enumerate(rowdata, start=1)]
+
         return coldata, rowdata
 
     def reset(self):
@@ -129,18 +131,33 @@ class BackendLogic:
         self.insert_date("anmelder_geburtsdatum", anmelder.Geburtsdatum)
 
     def process_teilnehmers(self):
+        # process all or by selecting a single item and then advancing
         teilnehmers = self.teilnehmer.to_records()
-        i = len(teilnehmers)
-        self.insert_dropdown("cnt", str(2)) # somehow get this number from page
-        for id, teilnehmer in enumerate(teilnehmers, start=1):
+        if self.all:
+            for id, teilnehmer in enumerate(teilnehmers, start=1):
+                try:
+                    self.process_teilnehmer(id, teilnehmer)
+                except Exception as e:
+                    break
+        else:
             try:
-                self.process_teilnehmer(id, teilnehmer)
+                self.process_teilnehmer(1, teilnehmers[self.numbers])
             except Exception as e:
-                break
+                print(e)
+
+        #teilnehmers = self.teilnehmer.to_records()
+        #i = len(teilnehmers)
+        #self.insert_dropdown("cnt", str(2)) # somehow get this number from page
+        #for id, teilnehmer in enumerate(teilnehmers, start=1):
+        #    try:
+        #        self.process_teilnehmer(id, teilnehmer)
+        #    except Exception as e:
+        #        break
 
 
     def process_teilnehmer(self, id, teilnehmer):
         try:
+            print("here")
             self.insert_dropdown_searchable(f"tn_firma_{id}", teilnehmer.Feuerwehr)
             self.insert_dropdown(f"tn_funktion_{id}", teilnehmer.Funktion)
             self.insert_dropdown(f"tn_anrede_{id}", teilnehmer.Anrede)

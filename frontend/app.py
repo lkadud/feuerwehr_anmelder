@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from tkinter import messagebox, filedialog
 #from tkinter import ttk
@@ -151,7 +152,10 @@ class ApplicationGUI(ttk.Frame):
         self.backend.reset()
 
     def process(self):
+        #load URL here?
         if self.backend.check():
+            self.backend.driver.get(self.backend.url)
+            time.sleep(3)
             self.backend.set_fail(self.fail_var.get())
             self.backend.set_all(self.all_var.get())
             self.backend.set_numbers(self.spinbox_var.get())
