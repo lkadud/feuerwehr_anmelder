@@ -92,6 +92,7 @@ class ApplicationGUI(ttk.Frame):
         self.all_var = ttk.BooleanVar()
         self.check_all = ttk.Checkbutton(self.frame_process, text="All", variable=self.all_var, command=toggle_spinbox)
         self.check_all.pack(side="right", padx=5,)
+        self.check_all.configure(state="disabled")
 
         self.table_frame = ttk.Frame(self)
         self.table_frame.pack(fill=tk.X, expand=tk.YES)#.grid(row=5, column=0, columnspan=3, sticky="nsew")
